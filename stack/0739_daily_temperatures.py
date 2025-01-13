@@ -1,12 +1,14 @@
 # https://leetcode.com/problems/daily-temperatures/
 class Solution:
     def dailyTemperatures(self, temperatures: List[int]) -> List[int]:
-        stack, res = [], [0] * len(temperatures)
-        for i, t in enumerate(temperatures):
-            while stack and t > stack[-1][0]:
-                stackT, stackInd = stack.pop()
-                res[stackInd] = i - stackInd
-            stack.append((t, i))
+        res = [0] * len(temperatures)
+        stack = []
+        for idx, temp in enumerate(temperatures):
+            while stack and stack[-1][1] < temp:
+                curr_item = stack.pop()
+                curr_index = curr_item[0]
+                res[curr_index] = idx - curr_index
+            stack.append((idx, temp))
         return res
 
         # for idx, temp in enumerate(temperatures):
