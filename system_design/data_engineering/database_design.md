@@ -22,16 +22,15 @@ https://app.datacamp.com/learn/courses/database-design
   * Larger, more complex queries for analysis
   * Typically only used by analysts and data scientists within the company
   * Typically uses a data warehouse (stores large volumes of historical data; optimized for read-heavy querying and analysis)
-
-![Screenshot 2025-01-15 at 2.09.24 PM.png](..%2F..%2F..%2F..%2FScreenshot%202025-01-15%20at%202.09.24%E2%80%AFPM.png)
+    
+![Screenshot 2025-01-15 at 2 09 24 PM](https://github.com/user-attachments/assets/84a2a2a0-bc0a-4b1b-ab41-8b60ae8b8b13)
 
 * These systems work together; they need each other.
 * OLTP data is usually stored in an operational database that is pulled and cleaned to create an OLAP data warehouse
 * Without transactional data, no analyses can be done in the first place
 * Analyses from OLAP systems inform business practices and day-to-day activities, thereby influencing the OLTP databases
 
-![Screenshot 2025-01-15 at 2.10.27 PM.png](..%2F..%2F..%2F..%2FScreenshot%202025-01-15%20at%202.10.27%E2%80%AFPM.png)
-
+![Screenshot 2025-01-15 at 2 10 27 PM](https://github.com/user-attachments/assets/1d1da0e3-13ca-4890-ba53-b7961409a6a2)
 
 <u>OLTP & OLAP Summary</u>
 
@@ -80,8 +79,8 @@ https://en.wikipedia.org/wiki/Data_model
 
 Example of data model using songs
 
-![Screenshot 2025-01-15 at 2.32.37 PM.png](..%2F..%2F..%2F..%2FScreenshot%202025-01-15%20at%202.32.37%E2%80%AFPM.png)
-![Screenshot 2025-01-15 at 2.33.29 PM.png](..%2F..%2F..%2F..%2FScreenshot%202025-01-15%20at%202.33.29%E2%80%AFPM.png)
+![Screenshot 2025-01-15 at 2 32 37 PM](https://github.com/user-attachments/assets/0847e7cc-86a5-40f0-a6c5-433405a6465e)
+![Screenshot 2025-01-15 at 2 33 29 PM](https://github.com/user-attachments/assets/ea6c0780-edf8-4a8e-aea1-d6a19c7e4e60)
 
 Dimensional modeling is an adaptation of the relational model specifically for data warehouses.
 It's optimized for OLAP type queries that aim to analyze rather than update. It uses the star schema.
@@ -93,7 +92,7 @@ The fact table contents are decided by the business use case. It contains record
 Fact tables also hold foreign keys to dimension tables. Dimension tables hold descriptions of specific attributes
 and these do not change as often. This is illustrated below with the song example.
 
-![Screenshot 2025-01-15 at 2.38.19 PM.png](..%2F..%2F..%2F..%2FScreenshot%202025-01-15%20at%202.38.19%E2%80%AFPM.png)
+![Screenshot 2025-01-15 at 2 38 19 PM](https://github.com/user-attachments/assets/fe67ee45-415d-46ca-813d-9f00479b2c68)
 
 The dimension tables expand on the attributes of a fact table, such as the album it is in and the artist who made it.
 The records in fact tables often change as new songs get inserted. Albums, labels, artists, and genres will be shared my more
@@ -102,5 +101,5 @@ than one song -- hence records in dimension tables won't change as much.
 Summary: to decide the fact table in a dimensional model, consider what is being analyzed and how often entities change.
 
 
-<h3>Database Schemas and Normalization</h3>
+<h3>2. Database Schemas and Normalization</h3>
 
