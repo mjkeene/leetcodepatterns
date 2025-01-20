@@ -206,3 +206,143 @@ workflows/tools like Spark and Airflow
 * View the generated SQL queries or run manually to verify it's working as expected
 * Verify that fixes worked and didn't cause some other issue
 
+
+<h3>3. Testing in dbt</h3>
+
+* A test is an assertion / validation of a dbt object (models, sources, seeds, snapshots)
+* Used to verify data is as expected
+  * Null values
+  * Values in a certain range
+  * Relationships between data
+  * Custom tests
+
+
+<b>Test types</b>
+* Built-in
+  * `unique` : verify all values are unique
+  * `not_null` : verify all values are not null
+  * `accepted_values` : verify all values are within a specific list `values: [a, b, c, d]`
+  * `relationships` : verifies a connection to a specific table / column `to: ref('table') field: id`
+* Singular
+* Generic
+
+
+<b>Where to apply tests?</b>
+* `models/model_properties.yml`
+* File can be named anything 
+  * `models/schema.yml`
+* Defined in the `tests:` subheading
+
+
+* Test example:
+```yaml
+version: 2
+
+models:
+  - name: taxi_rides_raw
+    columns:
+      - name: tpep_pickup_datetime
+        tests:
+          - not_null
+      - name: payment_type
+        tests:
+          - not_null
+          - accepted_values:
+            values: [1, 2, 3, 4, 5, 6]
+```
+
+* Run tests with `dbt test`
+  * `dbt test --select modelname`
+
+
+<b>Creating singular tests</b>
+* A singular test is a custom data test
+* Written as a SQL query
+  * Must return failing rows
+* Defined as `.sql` file in `tests` directories
+
+
+* Example of singular test
+  * Create a test to verify the `order_total` is greater than or equal to the `subtotal`
+
+```
+SELECT *
+FROM order
+WHERE order_total < subtotal
+```
+
+* Remember, we are looking for the rows that fail the test. If the test returns rows, then the test is marked as failed.
+* Save the file as `assert_order_total_gte_subtotal.sql`
+
+* Singular test with Jinja
+```
+SELECT *
+FROM {{ ref('order') }}
+WHERE order_total < subtotal
+```
+
+* Run individual test with `dbt test --select <testname>`
+
+<b>Reusable Tests</b>
+* Can be reused in multiple situations
+* Much like a built-in dbt test, but can check any condition
+* Uses Jinja templating
+* Saved as a `.sql` file in the `tests/generic` project folder
+* Must add test to the `model_properties.yml` for each model that uses it
+
+
+Reusable test example
+```
+{% test check_gt_0(model, column_name) %}
+
+SELECT *
+FROM {{ model }}
+-- To check greater than 0, use the opposite condition in where clause
+WHERE {{ column_name }} <= 0
+
+{% endtest %}
+```
+
+* Applying reusable test to model
+  * Name value is the model argument
+  * Columns are the name arguments in the column_name argument
+```yaml
+version: 2
+
+models:
+  - name: taxi_rides_raw
+    columns:
+      - name: tpep_pickup_datetime
+        tests:
+          - not_null
+      - name: total_fare
+        tests:
+          - check_gt_0
+```
+
+* Can add extra parameters to the test
+```
+{% test check_columns_unequal(model, column_name, column_name2) %}
+
+SELECT *
+FROM {{ model }}
+WHERE {{ column_name }} = {{ column_name2 }}
+
+{% endtest %}
+```
+
+<b>Documentation in dbt</b>
+* Share details with other consumers, centralize the documentation sources
+* Provide details for updates / changes
+* Create examples, suggestions for use, SLA details
+
+
+<b>Generating documentation in dbt</b>
+* `dbt docs`
+* `dbt docs generate`
+* Run after `dbt run`
+* Access the documentation in web browser with `dbt docs serve`
+* Can copy content to other hosting service
+  * dbt cloud
+  * AWS S3
+
