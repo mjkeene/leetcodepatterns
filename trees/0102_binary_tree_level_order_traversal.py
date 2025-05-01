@@ -4,28 +4,26 @@
 #         self.val = val
 #         self.left = left
 #         self.right = right
+from collections import deque
 
 class Solution:
     def levelOrder(self, root: Optional[TreeNode]) -> List[List[int]]:
-        # Iterative BFS
         res = []
         if not root:
             return res
 
-        q = collections.deque()
-        q.append(root)
-        res.append([root.val])
+        q = deque([root])
         while q:
-            new_list = []
-            for i in range(len(q)):
-                curr = q.popleft()
-                if curr.left:
-                    new_list.append(curr.left.val)
-                    q.append(curr.left)
-                if curr.right:
-                    new_list.append(curr.right.val)
-                    q.append(curr.right)
-            if new_list:
-                res.append(new_list)
+            level = []
+            for _ in range(len(q)):
+                node = q.popleft()
+                level.append(node.val)
+                if node.left:
+                    q.append(node.left)
+                if node.right:
+                    q.append(node.right)
+
+            res.append(level)
 
         return res
+        
