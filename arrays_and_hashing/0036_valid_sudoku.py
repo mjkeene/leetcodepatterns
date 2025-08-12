@@ -1,3 +1,7 @@
+from typing import List
+from collections import defaultdict
+
+
 class Solution:
     def isValidSudoku(self, board: List[List[str]]) -> bool:
         row_map = defaultdict(set)
@@ -11,9 +15,11 @@ class Solution:
                 if curr_val == '.':
                     continue
                 # duplicate detected
-                if (curr_val in row_map[row] or
+                if (
+                    curr_val in row_map[row] or
                     curr_val in col_map[col] or
-                    curr_val in square_map[(row // 3, col // 3)]):
+                    curr_val in square_map[(row // 3, col // 3)]
+                ):
                     return False
                 # update mappings
                 row_map[row].add(curr_val)
