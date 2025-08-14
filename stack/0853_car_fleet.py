@@ -1,17 +1,17 @@
 class Solution:
     def carFleet(self, target: int, position: List[int], speed: List[int]) -> int:
-        # only 1 car, must be only 1 fleet
-        if len(position) == 1:
-            return 1
+        # group based on how many iterations (units of time) will it take to arrive at target
+        stack, pairs = [], []
 
-        stack = []
-        pairs = [(p, s) for p, s in zip(position, speed)]
-        pairs.sort(key=lambda x : x[0], reverse=True)
+        for i in range(len(position)):
+            pairs.append((position[i], speed[i]))
 
-        for p, s in pairs:
-            stack.append((target - p) / s)
-            # if stack[-1] <= stack[-2], then they become a fleet
-            if len(stack) >= 2 and stack[-1] <= stack[-2]:
-                stack.pop()
+        pairs.sort(key=lambda x: x[0], reverse=True)
+
+        for item in pairs:
+            time = (target - item[0]) / item[1]
+            if not stack or stack[-1] < time:
+                stack.append(time)
 
         return len(stack)
+        
